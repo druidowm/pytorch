@@ -29,6 +29,9 @@
 
 namespace at {
 namespace native {
+// PI constant for bfloat16 according to https://en.wikipedia.org/wiki/Bfloat16_floating-point_format#Special_values
+template<>
+constexpr c10::BFloat16 pi<c10::BFloat16> = c10::BFloat16(0x4049, c10::BFloat16::from_bits());
 
 namespace {
 
@@ -310,7 +313,7 @@ static void sinc_kernel(TensorIterator& iter) {
           if (a == scalar_t(0)) {
             return scalar_t(1);
           } else {
-            scalar_t product = scalar_t(M_PI) * a;
+            scalar_t product = at::native::pi<scalar_t> * a;
             return std::sin(product) / product;
           }
         });
